@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
 app.use(express.static('public'));
 app.get('/', (req, res) => {
-  res.send('Hello Worldsssss!');
+  res.send('Hello DEVVVVVVVVVVVVVVVVVVVVVVVVV!');
 });
 
 app.use('/api', routes);
