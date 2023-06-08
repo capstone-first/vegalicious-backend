@@ -14,6 +14,7 @@ model User {
   name          String
   height        Decimal @default(0)
   weight        Decimal @default(0)
+  photoUrl      String @default("")
   refreshTokens RefreshToken[]
   UserHistoryRecipe UserHistoryRecipe[]
   createdAt     DateTime       @default(now())
@@ -62,6 +63,7 @@ model Recipe {
   sodium    Int
   rating    Int
   image     String @default("")
+  description String @db.Text
   RecipeDetail RecipeDetail[]
   UserHistoryRecipe UserHistoryRecipe[]
   createdAt DateTime @default(now())
