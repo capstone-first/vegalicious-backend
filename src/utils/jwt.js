@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 // generate access token for 5m
 export function generateAccessToken(user) {
   return jwt.sign({ userId: user.id }, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: '5m',
+    expiresIn: '100m',
   });
 }
 

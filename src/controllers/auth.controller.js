@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const register = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, name } = req.body;
 
     if (!email || !password) {
       res.status(400);
@@ -24,7 +24,7 @@ export const register = async (req, res, next) => {
       throw new Error('User already exists');
     }
 
-    const user = await createUserByEmailAndPassword({ email, password });
+    const user = await createUserByEmailAndPassword({ email, password, name });
     const jti = uuidv4();
     const { accessToken, refreshToken } = generateTokens(user, jti);
     await addRefreshTokenToWhiteList({ jti, refreshToken, userId: user.id });

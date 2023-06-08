@@ -34,6 +34,7 @@ export function isAuthenticated(req, res, next) {
 
   if (!authorization) {
     res.status(401);
+    res.json({ message: 'Un-Authorized' });
     throw new Error('🚫 Un-Authorized 🚫');
   }
 
@@ -44,8 +45,12 @@ export function isAuthenticated(req, res, next) {
   } catch (err) {
     res.status(401);
     if (err.name === 'TokenExpiredError') {
+      res.status(401);
+      res.json({ message: 'Token expired' });
       throw new Error(err.name);
     }
+    res.status(401);
+    res.json({ message: 'Un-Authorized' });
     throw new Error('🚫 Un-Authorized 🚫');
   }
 

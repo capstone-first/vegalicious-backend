@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  // output   = "../generated/client"
 }
 
 datasource db {
@@ -12,7 +11,11 @@ model User {
   id            String         @id @unique @default(uuid())
   email         String         @unique
   password      String
+  name          String
+  height        Decimal @default(0)
+  weight        Decimal @default(0)
   refreshTokens RefreshToken[]
+  UserHistoryRecipe UserHistoryRecipe[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
@@ -25,4 +28,66 @@ model RefreshToken {
   revoked     Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Category {
+  id        String   @id @unique @default(uuid())
+  name      String
+  RecipeDetail RecipeDetail[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Ingredient {
+  id        String   @id @unique @default(uuid())
+  name      String
+  RecipeDetail RecipeDetail[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Direction {
+  id        String   @id @unique @default(uuid())
+  name      String
+  RecipeDetail RecipeDetail[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Recipe {
+  id        String   @id @unique @default(uuid())
+  title     String
+  calories  Int
+  fat       Int
+  sodium    Int
+  rating    Int
+  image     String @default("")
+  RecipeDetail RecipeDetail[]
+  UserHistoryRecipe UserHistoryRecipe[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RecipeDetail {
+  id        String   @id @unique @default(uuid())
+  recipeId  String
+  Recipe    Recipe   @relation(fields: [recipeId], references: [id])
+  categoryId String
+  Category  Category @relation(fields: [categoryId], references: [id])
+  ingredientId String
+  Ingredient  Ingredient @relation(fields: [ingredientId], references: [id])
+  directionId String
+  Direction  Direction @relation(fields: [directionId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserHistoryRecipe {
+  id        String   @id @unique @default(uuid())
+  userId    String
+  User      User     @relation(fields: [userId], references: [id])
+  recipeId  String
+  Recipe    Recipe   @relation(fields: [recipeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
