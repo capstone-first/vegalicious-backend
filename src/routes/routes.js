@@ -12,6 +12,7 @@ import {
   updateCategory,
   destroyCategory,
 } from '../controllers/category.controller.js';
+import { ingredient } from '../controllers/ingredient.controller.js';
 router.post('/login', login);
 router.post('/register', register);
 router.get('/profile', isAuthenticated, getProfile);
@@ -23,4 +24,11 @@ router.get('/category/:id', isAuthenticated, getCategoryById);
 router.get('/category/name/:name', isAuthenticated, getCategoryByName);
 router.put('/category/:id', isAuthenticated, updateCategory);
 router.delete('/category/:id', isAuthenticated, destroyCategory);
+
+// ingredient
+router.post('/ingredient', isAuthenticated, ingredient.create);
+router.get('/ingredient', isAuthenticated, ingredient.getAll);
+router.get('/ingredient/:id', isAuthenticated, ingredient.getById);
+router.put('/ingredient/:id', isAuthenticated, ingredient.updateById);
+router.delete('/ingredient/:id', isAuthenticated, ingredient.deleteById);
 export default router;
