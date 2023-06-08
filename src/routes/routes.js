@@ -13,6 +13,7 @@ import {
   destroyCategory,
 } from '../controllers/category.controller.js';
 import { ingredient } from '../controllers/ingredient.controller.js';
+import { direction } from '../controllers/direction.controller.js';
 router.post('/login', login);
 router.post('/register', register);
 router.get('/profile', isAuthenticated, getProfile);
@@ -31,4 +32,12 @@ router.get('/ingredient', isAuthenticated, ingredient.getAll);
 router.get('/ingredient/:id', isAuthenticated, ingredient.getById);
 router.put('/ingredient/:id', isAuthenticated, ingredient.updateById);
 router.delete('/ingredient/:id', isAuthenticated, ingredient.deleteById);
+
+// direction
+router.post('/direction', isAuthenticated, direction.create);
+router.get('/direction', isAuthenticated, direction.getAll);
+router.get('/direction/:id', isAuthenticated, direction.getById);
+router.put('/direction/:id', isAuthenticated, direction.updateById);
+router.delete('/direction/:id', isAuthenticated, direction.deleteById);
+
 export default router;
