@@ -1,25 +1,31 @@
-version: '3.8'
+version: '3'
 services:
-  app:
-    build: .
-    ports:
-      - '8080:3000'
-    depends_on:
-      - db
-    env_file:
-      - .env
-    restart: always
-
   db:
     image: postgres:13
-    ports:
-      - '5432:5432'
     environment:
-      - POSTGRES_PASSWORD=123qwe123
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=vegalicious
-    volumes:
-      - db_data:/var/lib/postgresql/data
-
-volumes:
-  db_data:
+      POSTGRES_USER: postgresuser
+      POSTGRES_PASSWORD: posgrespassword
+      POSTGRES_DB: vegalicious
+    ports:
+      - 5432:5432
+    networks:
+      - app-network
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgresuser
+      POSTGRES_PASSWORD: posgrespassword
+      POSTGRES_DB: vegalicious
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
