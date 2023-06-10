@@ -8,88 +8,122 @@ datasource db {
 }
 
 model User {
-  id            String         @id @unique @default(uuid())
-  email         String         @unique
-  password      String
-  name          String
-  height        Decimal @default(0)
-  weight        Decimal @default(0)
-  photoUrl      String @default("")
-  refreshTokens RefreshToken[]
+  id                String              @id @unique @default(uuid())
+  email             String              @unique
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  password          String
+  height            Decimal             @default(0)
+  name              String
+  weight            Decimal             @default(0)
+  photoUrl          String              @default("")
+  refreshTokens     RefreshToken[]
   UserHistoryRecipe UserHistoryRecipe[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
 }
 
 model RefreshToken {
   id          String   @id @unique @default(uuid())
   hashedToken String
   userId      String
-  User       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   revoked     Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Category {
-  id        String   @id @unique @default(uuid())
-  name      String
-  RecipeDetail RecipeDetail[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String           @id @unique @default(uuid())
+  name           String           @default("")
+  RecipeCategory RecipeCategory[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
 
 model Ingredient {
-  id        String   @id @unique @default(uuid())
-  name      String
-  RecipeDetail RecipeDetail[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String             @id @unique @default(uuid())
+  name             String             @default("")
+  RecipeIngredient RecipeIngredient[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
 }
 
 model Direction {
-  id        String   @id @unique @default(uuid())
-  name      String
-  RecipeDetail RecipeDetail[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String            @id @unique @default(uuid())
+  name            String            @default("")
+  RecipeDirection RecipeDirection[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 }
 
 model Recipe {
-  id        String   @id @unique @default(uuid())
-  title     String
-  calories  Int
-  fat       Int
-  sodium    Int
-  rating    Int
-  image     String @default("")
-  description String @db.Text
-  RecipeDetail RecipeDetail[]
+  id                String              @id @unique @default(uuid())
+  title             String              @default("")
+  calories          Int                 @default(0)
+  fat               Int                 @default(0)
+  sodium            Int                 @default(0)
+  rating            Int                 @default(0)
+  image             String              @default("")
+  description       String              @default("")
+  RecipeCategory    RecipeCategory[]
+  RecipeIngredient  RecipeIngredient[]
   UserHistoryRecipe UserHistoryRecipe[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  RecipeDirection   RecipeDirection[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
 }
 
-model RecipeDetail {
-  id        String   @id @unique @default(uuid())
-  recipeId  String
-  Recipe    Recipe   @relation(fields: [recipeId], references: [id])
+model RecipeCategory {
+  id         String   @id @unique @default(uuid())
+  recipeId   String
   categoryId String
-  Category  Category @relation(fields: [categoryId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Recipe     Recipe   @relation(fields: [recipeId], references: [id])
+  Category   Category @relation(fields: [categoryId], references: [id])
+}
+
+model RecipeIngredient {
+  id           String     @id @unique @default(uuid())
+  recipeId     String
   ingredientId String
-  Ingredient  Ingredient @relation(fields: [ingredientId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  Recipe       Recipe     @relation(fields: [recipeId], references: [id])
+  Ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+}
+
+model RecipeDirection {
+  id          String    @id @unique @default(uuid())
+  recipeId    String
   directionId String
-  Direction  Direction @relation(fields: [directionId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Recipe      Recipe    @relation(fields: [recipeId], references: [id])
+  Direction   Direction @relation(fields: [directionId], references: [id])
 }
 
 model UserHistoryRecipe {
   id        String   @id @unique @default(uuid())
   userId    String
-  User      User     @relation(fields: [userId], references: [id])
   recipeId  String
-  Recipe    Recipe   @relation(fields: [recipeId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Recipe    Recipe   @relation(fields: [recipeId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model Recipe2 {
+  id          String   @id @unique @default(uuid())
+  directions  String   @db.Text
+  fat         Int
+  date        DateTime @db.Date
+  categories  String   @db.Text
+  calories    Int
+  desc        String   @db.Text
+  protein     Int
+  rating      Int
+  title       String   @db.VarChar(255)
+  ingredients String   @db.Text
+  sodium      Int
+  image       String   @default("") @db.Text
 }
