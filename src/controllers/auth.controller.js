@@ -13,14 +13,17 @@ export const register = async (req, res, next) => {
 
     if (!email || !password) {
       res.status(400);
-      res.json({ message: 'You must provide email and password' });
+      res.json({
+        status: 'success',
+        message: 'You must provide email and password',
+      });
       throw new Error('You must provide email and password');
     }
 
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
       res.status(400);
-      res.json({ message: 'User already exists' });
+      res.json({ status: 'success', message: 'User already exists' });
       throw new Error('User already exists');
     }
 
@@ -50,12 +53,14 @@ export const login = async (req, res, next) => {
 
     if (!existingUser) {
       res.status(400);
+      res.json({ status: 'error', message: 'User does not exist' });
       throw new Error('User does not exist');
     }
 
     const validPassword = await bcrypt.compare(password, existingUser.password);
     if (!validPassword) {
       res.status(403);
+      res.json({ status: 'error', message: 'Invalid login credentials' });
       throw new Error('Invalid login credentials.');
     }
 

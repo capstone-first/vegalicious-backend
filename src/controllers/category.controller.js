@@ -74,7 +74,9 @@ export const destroyCategory = async (req, res) => {
   try {
     const thatCategory = await findCategoryById(req.params.id);
     if (!thatCategory)
-      return res.status(404).json({ message: 'Category not found' });
+      return res
+        .status(404)
+        .json({ status: 'error', message: 'Category not found' });
     await deleteCategoryById(id);
     res.status(200).json({ status: 'success', message: 'Category deleted' });
   } catch (error) {

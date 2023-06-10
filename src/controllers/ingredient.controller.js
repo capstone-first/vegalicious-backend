@@ -12,9 +12,11 @@ export const ingredient = {
     if (!name) return res.status(422).json({ message: 'Name is required' });
     try {
       const newIngredient = await createIngredient(name);
-      res
-        .status(201)
-        .json({ message: 'Ingredient created', data: newIngredient });
+      res.status(201).json({
+        status: 'success',
+        message: 'Ingredient created',
+        data: newIngredient,
+      });
     } catch (error) {
       res.status(500).json({ status: 'error', message: error.message });
     }
@@ -22,7 +24,11 @@ export const ingredient = {
   getAll: async (req, res) => {
     try {
       const ingredients = await getAllIngredients();
-      res.status(200).json({ message: 'All ingredients', data: ingredients });
+      res.status(200).json({
+        status: 'success',
+        message: 'All ingredients',
+        data: ingredients,
+      });
     } catch (error) {
       res.status(500).json({ status: 'error', message: error.message });
     }
@@ -32,8 +38,14 @@ export const ingredient = {
     try {
       const ingredient = await getIngredientById(id);
       if (!ingredient)
-        return res.status(404).json({ message: 'Ingredient not found' });
-      res.status(200).json({ message: 'Ingredient found', data: ingredient });
+        return res
+          .status(404)
+          .json({ status: 'error', message: 'Ingredient not found' });
+      res.status(200).json({
+        status: 'success',
+        message: 'Ingredient found',
+        data: ingredient,
+      });
     } catch (error) {
       res.status(500).json({ status: 'error', message: error.message });
     }
@@ -41,15 +53,22 @@ export const ingredient = {
   updateById: async (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
-    if (!name) return res.status(422).json({ message: 'Name is required' });
+    if (!name)
+      return res
+        .status(422)
+        .json({ status: 'error', message: 'Name is required' });
     try {
       const ingredient = await getIngredientById(id);
       if (!ingredient)
-        return res.status(404).json({ message: 'Ingredient not found' });
+        return res
+          .status(404)
+          .json({ status: 'error', message: 'Ingredient not found' });
       const updatedIngredient = await updateIngredientById(id, name);
-      res
-        .status(200)
-        .json({ message: 'Ingredient updated', updatedIngredient });
+      res.status(200).json({
+        status: 'success',
+        message: 'Ingredient updated',
+        updatedIngredient,
+      });
     } catch (error) {
       res.status(500).json({ status: 'error', message: error.message });
     }
@@ -58,9 +77,11 @@ export const ingredient = {
     const { id } = req.params;
     try {
       const deletedIngredient = await deleteIngredientById(id);
-      res
-        .status(200)
-        .json({ message: 'Ingredient deleted', deletedIngredient });
+      res.status(200).json({
+        status: 'success',
+        message: 'Ingredient deleted',
+        deletedIngredient,
+      });
     } catch (error) {
       res.status(500).json({ status: 'error', message: error.message });
     }
