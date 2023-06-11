@@ -13,7 +13,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   
-  },
   "dependencies": {
     "@prisma/client": "^4.9.0",
     "axios": "^1.4.0",
