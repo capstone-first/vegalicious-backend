@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "User" ALTER COLUMN "height" SET DEFAULT 0,
-ALTER COLUMN "weight" SET DEFAULT 0;

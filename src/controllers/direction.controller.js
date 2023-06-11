@@ -9,12 +9,17 @@ import {
 export const direction = {
   create: async (req, res) => {
     const { name } = req.body;
-    if (!name) return res.status(422).json({ message: 'Name is required' });
+    if (!name)
+      return res
+        .status(422)
+        .json({ status: 'error', message: 'Name is required' });
     try {
       const newDirection = await createDirection(name);
-      res
-        .status(201)
-        .json({ message: 'Direction created', data: newDirection });
+      res.status(201).json({
+        status: 'success',
+        message: 'Direction created',
+        data: newDirection,
+      });
     } catch (error) {
       res.status(500).json({ status: 'error', message: error.message });
     }
@@ -22,7 +27,11 @@ export const direction = {
   getAll: async (req, res) => {
     try {
       const directions = await getAllDirections();
-      res.status(200).json({ message: 'All directions', data: directions });
+      res.status(200).json({
+        status: 'success',
+        message: 'All directions',
+        data: directions,
+      });
     } catch (error) {
       res.status(500).json({ status: 'error', message: error.message });
     }
@@ -33,7 +42,11 @@ export const direction = {
       const direction = await getDirectionById(id);
       if (!direction)
         return res.status(404).json({ message: 'Direction not found' });
-      res.status(200).json({ message: 'Direction found', data: direction });
+      res.status(200).json({
+        status: 'success',
+        message: 'Direction found',
+        data: direction,
+      });
     } catch (error) {
       res.status(500).json({ status: 'error', message: error.message });
     }
@@ -41,13 +54,22 @@ export const direction = {
   updateById: async (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
-    if (!name) return res.status(422).json({ message: 'Name is required' });
+    if (!name)
+      return res
+        .status(422)
+        .json({ status: 'error', message: 'Name is required' });
     try {
       const direction = await getDirectionById(id);
       if (!direction)
-        return res.status(404).json({ message: 'Direction not found' });
+        return res
+          .status(404)
+          .json({ status: 'error', message: 'Direction not found' });
       const updatedDirection = await updateDirectionById(id, name);
-      res.status(200).json({ message: 'Direction updated', updatedDirection });
+      res.status(200).json({
+        status: 'success',
+        message: 'Direction updated',
+        updatedDirection,
+      });
     } catch (error) {
       res.status(500).json({ status: 'error', message: error.message });
     }
@@ -58,9 +80,11 @@ export const direction = {
       const deletedDirection = await deleteDirectionById(id);
       if (!deletedDirection)
         return res.status(404).json({ message: 'Direction not found' });
-      res
-        .status(200)
-        .json({ message: 'Direction deleted', data: deletedDirection });
+      res.status(200).json({
+        status: 'success',
+        message: 'Direction deleted',
+        data: deletedDirection,
+      });
     } catch (error) {
       res.status(500).json({ status: 'error', message: error.message });
     }
