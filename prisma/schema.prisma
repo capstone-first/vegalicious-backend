@@ -16,9 +16,10 @@ model User {
   height            Decimal             @default(0)
   name              String
   weight            Decimal             @default(0)
-  photoUrl          String              @default("")
+  photoUrl          String              @default("https://raw.githubusercontent.com/capstone-first/Vegalicious-Avatar/main/personas-1686142027724.png")
   refreshTokens     RefreshToken[]
   UserHistoryRecipe UserHistoryRecipe[]
+  BookmarkRecipe    BookmarkRecipe[]
 }
 
 model RefreshToken {
@@ -68,6 +69,7 @@ model Recipe {
   RecipeIngredient  RecipeIngredient[]
   UserHistoryRecipe UserHistoryRecipe[]
   RecipeDirection   RecipeDirection[]
+  BookmarkRecipe    BookmarkRecipe[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
 }
@@ -103,6 +105,16 @@ model RecipeDirection {
 }
 
 model UserHistoryRecipe {
+  id        String   @id @unique @default(uuid())
+  userId    String
+  recipeId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Recipe    Recipe   @relation(fields: [recipeId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model BookmarkRecipe {
   id        String   @id @unique @default(uuid())
   userId    String
   recipeId  String

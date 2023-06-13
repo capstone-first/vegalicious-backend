@@ -23,3 +23,12 @@ export const findUserById = async (id) => {
     },
   });
 };
+
+export const updateUserById = async (id, user) => {
+  return await db.user.update({
+    where: {
+      id,
+    },
+    data: user,
+  });
+};
