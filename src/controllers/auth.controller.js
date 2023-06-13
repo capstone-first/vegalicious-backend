@@ -31,12 +31,19 @@ export const register = async (req, res, next) => {
     const jti = uuidv4();
     const { accessToken, refreshToken } = generateTokens(user, jti);
     await addRefreshTokenToWhiteList({ jti, refreshToken, userId: user.id });
-
     res.json({
+      status: 'success',
+      message: 'User created successfully',
+      data: user,
       accessToken,
       refreshToken,
     });
   } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Login failed',
+      data: err.message,
+    });
     next(err);
   }
 };
@@ -73,10 +80,18 @@ export const login = async (req, res, next) => {
     });
 
     res.json({
+      status: 'success',
+      message: 'User logged in successfully',
+      data: existingUser,
       accessToken,
       refreshToken,
     });
   } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Login failed',
+      data: err.message,
+    });
     next(err);
   }
 };
