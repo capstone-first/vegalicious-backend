@@ -51,6 +51,7 @@ router.get('/recipe', isAuthenticated, recipe.getAll);
 router.post('/recipe/recomendation', isAuthenticated, recipe.getRecomendation);
 router.get('/recipe/:id', isAuthenticated, recipe.getById);
 router.post('/recipe/category', isAuthenticated, recipe.getByCategory);
+router.get('/recipe/:title/find', isAuthenticated, recipe.findByTitle);
 
 // historyPage
 router.post('/history/store', isAuthenticated, history.storeUserHistory);

@@ -95,3 +95,25 @@ export const login = async (req, res, next) => {
     next(err);
   }
 };
+
+export const logout = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
+      res.status(400);
+      throw new Error('Refresh token is required');
+    }
+    await removeRefreshTokenFromWhiteList(refreshToken);
+    res.json({
+      status: 'success',
+      message: 'User logged out successfully',
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Logout failed',
+      data: err.message,
+    });
+    next(err);
+  }
+}

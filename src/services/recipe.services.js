@@ -9,6 +9,25 @@ export const recipe = {
       // make paginations
       take: limit,
       skip: skip,
+      select: {
+        id: true,
+        title: true,
+        image: true,
+        fat: true,
+        calories: true,
+        sodium: true,
+        rating: true,
+        RecipeCategory: {
+          select: {
+            Category: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
       // where not title = null
     });
   },
@@ -60,11 +79,33 @@ export const recipe = {
       },
     });
   },
-  getByTitle: async (title) => {
+  getByTitle: async (title, limit, skip) => {
     return await db.recipe.findMany({
+      take: limit,
+      skip: skip,
+      select: {
+        id: true,
+        title: true,
+        image: true,
+        fat: true,
+        calories: true,
+        sodium: true,
+        rating: true,
+        RecipeCategory: {
+          select: {
+            Category: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
       where: {
         title: {
           contains: title,
+          mode: 'insensitive',
         },
       },
     });
@@ -101,6 +142,25 @@ export const recipe = {
     return await db.recipe.findMany({
       take: limit,
       skip: skip,
+      select: {
+        id: true,
+        title: true,
+        image: true,
+        fat: true,
+        calories: true,
+        sodium: true,
+        rating: true,
+        RecipeCategory: {
+          select: {
+            Category: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
       where: {
         RecipeCategory: {
           some: {

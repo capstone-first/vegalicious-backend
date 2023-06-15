@@ -15,7 +15,7 @@ export const recipe = {
   getAll: async (req, res) => {
     try {
       const { page = 1 } = req.query;
-      const limit = 20;
+      const limit = 30;
       let skip = (page - 1) * limit;
       const recipes = await r.getAll(parseInt(limit), skip);
       const total = await r.count();
@@ -25,6 +25,7 @@ export const recipe = {
         currentPage: page - 0,
         totalPages: totalPages,
         totalData: total,
+        message: recipes.length === 0 ? 'No data found' : 'Data found',
         data: recipes,
       });
     } catch (error) {
@@ -36,14 +37,9 @@ export const recipe = {
     try {
       const { id } = req.params;
       const recipe = await r.getById(id);
-      if (!recipe) {
-        res.status(404).json({
-          status: 'error',
-          message: 'Recipe not found',
-        });
-      }
       res.status(200).json({
         status: 'success',
+        message: typeof recipe !== 'object' ? 'No data found' : 'Data found',
         data: recipe,
       });
     } catch (error) {
@@ -63,13 +59,6 @@ export const recipe = {
 
       const resultRecimendation = await recomendations.data
         .topRecommendationRecipes;
-      if (resultRecimendation.length === 0) {
-        res.status(404).json({
-          status: 'success',
-          message: 'No recomendation found',
-        });
-      }
-      console.log(resultRecimendation);
       let response = [];
       for (const title of resultRecimendation) {
         try {
@@ -82,13 +71,9 @@ export const recipe = {
             calories: recipe.calories ?? 0,
             sodium: recipe.sodium ?? 0,
             rating: recipe.rating ?? 0,
-            category: eval(recipe.categories),
+            RecipeCategory: recipe.RecipeCategory,
             image: recipe.image ?? '',
-            ingredients: eval(recipe.ingredients),
-            directions: eval(recipe.directions),
             description: recipe.desc ?? '',
-            createdAt: recipe.createdAt ?? '',
-            updatedAt: recipe.updatedAt ?? '',
           });
         } catch (error) {
           console.log(error);
@@ -97,6 +82,7 @@ export const recipe = {
 
       res.json({
         status: 'success',
+        message: response.length === 0 ? 'No data found' : 'Data found',
         data: response,
       });
     } catch (error) {
@@ -121,6 +107,7 @@ export const recipe = {
         currentPage: page - 0,
         totalPages: totalPages,
         totalData: total,
+        message: recipes.length === 0 ? 'No data found' : 'Data found',
         data: recipes,
       });
     } catch (error) {
@@ -128,136 +115,26 @@ export const recipe = {
       res.status(500).json({ status: 'error', message: error.message });
     }
   },
+  findByTitle: async (req, res, next) => {
+    try {
+      const { title } = req.params;
+      const { page = 1 } = req.query;
+      const limit = 30;
+      let skip = (page - 1) * limit;
+      const recipes = await r.getByTitle(title, parseInt(limit), skip);
+      const total = recipes.length ?? 0;
+      const totalPages = Math.ceil(total / limit) ?? 0;
+      res.status(200).json({
+        status: 'success',
+        currentPage: page - 0,
+        totalPages: totalPages ?? 0,
+        totalData: total ?? 0,
+        message: recipes.length === 0 ? 'No data found' : 'Data found',
+        data: recipes ?? [],
+      });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).json({ status: 'error', message: error.message });
+    }
+  },
 };
-
-// export const recipe2 = {
-//   getAll: async (req, res) => {
-//     try {
-//       const { page = 1 } = req.query;
-//       const limit = 20;
-//       let skip = (page - 1) * limit;
-//       const recipes = await r.getAll(parseInt(limit), skip);
-//       const total = await r.count();
-//       const totalPages = Math.ceil(total / limit);
-//       const responseRecipes = [];
-//       recipes.map((recipe) => {
-//         console.log(recipe.directions);
-//         responseRecipes.push({
-//           id: recipe.id,
-//           title: recipe.title ?? '',
-//           category: eval(recipe.categories),
-//           image: recipe.image ?? '',
-//           // ingredients: JSON.parse(recipe.ingredients.replace(/'/g, '"')),
-//           // directions: JSON.parse(recipe.directions),
-//           description: recipe.desc ?? '',
-//           createdAt: recipe.createdAt ?? '',
-//           updatedAt: recipe.updatedAt ?? '',
-//         });
-//       });
-//       res.status(200).json({
-//         status: 'success',
-//         currentPage: page - 0,
-//         totalPages: totalPages,
-//         totalData: total,
-//         data: responseRecipes,
-//       });
-//     } catch (error) {
-//       console.log(error);
-//       res.status(500).json({ status: 'error', message: error.message });
-//     }
-//   },
-//   getCategory: async (req, res) => {
-//     try {
-//       const { page = 1 } = req.query;
-//       const limit = 10;
-//       let skip = (page - 1) * limit;
-//       const total = await r.count();
-//       const categories = await r.getByCategory(parseInt(limit), skip);
-//       const responseCategories = [];
-//       const totalPages = Math.ceil(total / limit);
-//       categories.map((category) => {
-//         const categoryJSON =
-//           JSON.parse(decodeURIComponent(category.categories)) ?? [];
-//         responseCategories.push(categoryJSON.flat());
-//       });
-//       res.status(200).json({
-//         status: 'success',
-//         currentPage: page - 0,
-//         totalPages: totalPages,
-//         totalData: total,
-//         data: [...new Set(responseCategories.flat())], // remove duplicate
-//       });
-//     } catch (error) {
-//       res
-//         .status(500)
-//         .json({ status: 'error', message: error.name + '||' + error.message });
-//     }
-//   },
-//   getRecomendation: async (req, res) => {
-//     const { sentence } = req.body;
-//     try {
-//       const recomendations = await axios.post(
-//         process.env.ML_API_URL + '/recommend',
-//         {
-//           sentence: sentence,
-//         }
-//       );
-
-//       const resultRecimendation = await recomendations.data
-//         .topRecommendationRecipes;
-//       if (resultRecimendation.length === 0) {
-//         res.status(404).json({
-//           status: 'success',
-//           message: 'No recomendation found',
-//         });
-//       }
-//       let response = [];
-//       for (const title of resultRecimendation) {
-//         try {
-//           let recipe = await r.getRecipeByTitle(title);
-//           recipe = recipe[0];
-//           response.push({
-//             id: recipe.id,
-//             title: recipe.title ?? '',
-//             category: eval(recipe.categories),
-//             image: recipe.image ?? '',
-//             ingredients: eval(recipe.ingredients),
-//             directions: eval(recipe.directions),
-//             description: recipe.desc ?? '',
-//             createdAt: recipe.createdAt ?? '',
-//             updatedAt: recipe.updatedAt ?? '',
-//           });
-//         } catch (error) {
-//           console.log(error);
-//         }
-//       }
-
-//       res.json({
-//         status: 'success',
-//         data: response,
-//       });
-//     } catch (error) {
-//       console.log(error);
-//       res.status(500).json({ status: 'error', message: error.message });
-//     }
-//   },
-//   getRecipeById: async (req, res) => {
-//     const { id } = req.params;
-//     try {
-//       const recipe = await r.getRecipeById(id);
-//       if (recipe.length === 0) {
-//         res.status(404).json({
-//           status: 'success',
-//           message: 'Recipe not found',
-//         });
-//       }
-//       res.status(200).json({
-//         status: 'success',
-//         data: recipe,
-//       });
-//     } catch (error) {
-//       console.log(error);
-//       res.status(500).json({ status: 'error', message: error.message });
-//     }
-//   },
-// };
