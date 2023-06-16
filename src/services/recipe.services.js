@@ -124,6 +124,7 @@ export const recipe = {
             Category: {
               name: {
                 in: mapCategories,
+                mode: 'insensitive',
               },
             },
           },
@@ -167,6 +168,7 @@ export const recipe = {
             Category: {
               name: {
                 in: mapCategories,
+                mode: 'insensitive',
               },
             },
           },
