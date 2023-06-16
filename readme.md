@@ -1,6 +1,6 @@
-# Vegalicous Backend API
+# Vegalicious Backend API
 
-Backend about Vegalicous API develop using [ExpressJS](https://expressjs.com/) database using PostgreSQL
+Backend about Vegalicious API develop using [ExpressJS](https://expressjs.com/) database using PostgreSQL
 
 # How to Install
 
@@ -26,5 +26,5 @@ Backend about Vegalicous API develop using [ExpressJS](https://expressjs.com/) d
 
 | **Name**            | **Bangkit ID**  |
 | ------------------- | --------------- |
-| Septian Dwi Putra P | **C309DSY3242** |
+| Septian Dwi Putra P | **C309DSX0900** |
 | Nadhira Aliya Zahra | **C309DSY3242** |
