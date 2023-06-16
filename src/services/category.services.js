@@ -24,6 +24,7 @@ export const findCategoryByName = async (name) => {
     where: {
       name: {
         contains: name,
+        mode: 'insensitive',
       },
     },
   });
