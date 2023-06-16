@@ -61,4 +61,5 @@ router.get('/history', isAuthenticated, history.getUserHistory);
 router.post('/bookmark', isAuthenticated, bookmark.create);
 router.get('/bookmark', isAuthenticated, bookmark.getBookmarkByUserId);
 router.delete('/bookmark/:id', isAuthenticated, bookmark.delete);
+router.post('/bookmark/check', isAuthenticated, bookmark.checkBookmark);
 export default router;

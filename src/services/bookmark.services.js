@@ -40,6 +40,7 @@ export const bookmark = {
     });
   },
   findByRecipeId: async (recipeId, userId) => {
+    console.log(recipeId, userId);
     return await db.bookmarkRecipe.findMany({
       // where with and oprator
       where: {
